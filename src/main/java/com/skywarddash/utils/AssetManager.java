@@ -15,6 +15,7 @@ public class AssetManager implements Disposable {
     public TextureRegion playerIdle;
     public TextureRegion playerRun1, playerRun2;
     public TextureRegion playerJump;
+    public TextureRegion playerFalling;
     // Platform textures
     public Texture platformNormalTexture;
     public Texture platformBouncyTexture;
@@ -25,6 +26,8 @@ public class AssetManager implements Disposable {
     // Background textures
     public Texture backgroundTexture;
     public Texture cloudsTexture;
+    public Texture menuBackgroundTexture;
+    public Texture splashBackgroundTexture;
     // UI textures
     public Texture buttonTexture;
     public Texture buttonSelectedTexture;
@@ -81,15 +84,44 @@ public class AssetManager implements Disposable {
 
     private void createPlayerTextures() {
         try {
-            // Try to load actual player sprite from Kenney pack
-            if (Gdx.files.internal("assets/kenney_platformer-pack-redux/PNG/Players/Variable sizes/Blue/alienBlue_front.png").exists()) {
-                Texture playerTexture = new Texture(Gdx.files.internal("assets/kenney_platformer-pack-redux/PNG/Players/Variable sizes/Blue/alienBlue_front.png"));
-                playerIdle = new TextureRegion(playerTexture);
-                Gdx.app.log("AssetManager", "Player texture loaded from Kenney pack");
-                return;
+            // Load all player animation sprites from Kenney pack
+            String basePath = "assets/kenney_platformer-pack-redux/PNG/Players/Variable sizes/Blue/";
+            
+            if (Gdx.files.internal(basePath + "alienBlue_stand.png").exists()) {
+                playerIdle = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_stand.png")));
+                Gdx.app.log("AssetManager", "Player idle animation loaded");
             }
+            
+            if (Gdx.files.internal(basePath + "alienBlue_walk1.png").exists()) {
+                playerRun1 = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_walk1.png")));
+                Gdx.app.log("AssetManager", "Player walk1 animation loaded");
+            }
+            
+            if (Gdx.files.internal(basePath + "alienBlue_walk2.png").exists()) {
+                playerRun2 = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_walk2.png")));
+                Gdx.app.log("AssetManager", "Player walk2 animation loaded");
+            }
+            
+            if (Gdx.files.internal(basePath + "alienBlue_jump.png").exists()) {
+                playerJump = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_jump.png")));
+                Gdx.app.log("AssetManager", "Player jump animation loaded");
+            }
+            
+            if (Gdx.files.internal(basePath + "alienBlue_front.png").exists()) {
+                playerFalling = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_front.png")));
+                Gdx.app.log("AssetManager", "Player falling animation loaded");
+            }
+            
+            // Fallback if any animations are missing
+            if (playerIdle == null && Gdx.files.internal(basePath + "alienBlue_front.png").exists()) {
+                playerIdle = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_front.png")));
+            }
+            
+            Gdx.app.log("AssetManager", "Player animations loaded from Kenney pack");
+            return;
+            
         } catch (Exception e) {
-            Gdx.app.error("AssetManager", "Failed to load player texture: " + e.getMessage());
+            Gdx.app.error("AssetManager", "Failed to load player animations: " + e.getMessage());
         }
 
         // Fallback to colored texture - scaled for 1920x1080
@@ -156,7 +188,23 @@ public class AssetManager implements Disposable {
 
     private void createBackgroundTextures() {
         try {
-            // Try to load background from Kenney pack first
+            // Load custom menu background first
+            if (Gdx.files.internal("assets/images/mainmenu.png").exists()) {
+                menuBackgroundTexture = new Texture(Gdx.files.internal("assets/images/mainmenu.png"));
+                Gdx.app.log("AssetManager", "Menu background texture loaded");
+            } else {
+                menuBackgroundTexture = createGradientBackground();
+            }
+            
+            // Load custom splash background
+            if (Gdx.files.internal("assets/images/splash.png").exists()) {
+                splashBackgroundTexture = new Texture(Gdx.files.internal("assets/images/splash.png"));
+                Gdx.app.log("AssetManager", "Splash background texture loaded");
+            } else {
+                splashBackgroundTexture = createGradientBackground();
+            }
+            
+            // Try to load background from Kenney pack for game
             if (Gdx.files.internal("assets/kenney_platformer-pack-redux/PNG/Backgrounds/blue_desert.png").exists()) {
                 backgroundTexture = new Texture(Gdx.files.internal("assets/kenney_platformer-pack-redux/PNG/Backgrounds/blue_desert.png"));
                 Gdx.app.log("AssetManager", "Background texture loaded from Kenney pack");
@@ -354,6 +402,10 @@ public class AssetManager implements Disposable {
     public int getHighScore() {
         return preferences.getInteger("highScore", 0);
     }
+    
+    public Preferences getPreferences() {
+        return preferences;
+    }
 
     public void playSound(Sound sound) {
         if (sound != null) {
@@ -427,6 +479,8 @@ public class AssetManager implements Disposable {
         if (platformFallingTexture != null) platformFallingTexture.dispose();
         if (backgroundTexture != null) backgroundTexture.dispose();
         if (cloudsTexture != null) cloudsTexture.dispose();
+        if (menuBackgroundTexture != null) menuBackgroundTexture.dispose();
+        if (splashBackgroundTexture != null) splashBackgroundTexture.dispose();
         if (buttonTexture != null) buttonTexture.dispose();
         if (buttonSelectedTexture != null) buttonSelectedTexture.dispose();
         if (panelTexture != null) panelTexture.dispose();

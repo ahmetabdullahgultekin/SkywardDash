@@ -4,6 +4,9 @@
       "Bash(mvn:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\mnt\\c\\Users\\ahabg\\IdeaProjects"
+    ]
   }
 }

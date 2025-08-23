@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.skywarddash.screens.MenuScreen;
+import com.skywarddash.screens.SplashScreen;
 import com.skywarddash.utils.AssetManager;
 
 public class SkywardDashGame extends Game {
@@ -21,7 +22,7 @@ public class SkywardDashGame extends Game {
         font = new BitmapFont();
         assetManager = new AssetManager();
 
-        this.setScreen(new MenuScreen(this));
+        this.setScreen(new SplashScreen(this));
     }
 
     @Override

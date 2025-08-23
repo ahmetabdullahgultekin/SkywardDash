@@ -76,7 +76,12 @@ public class PlatformGenerator {
 
         // Generate platforms if player is getting close to the top
         while (highestPlatformY < playerY + Constants.WORLD_HEIGHT * 3) {
-            generateNextPlatform();
+            // Check if we need to create a celebration/rest floor
+            if ((currentFloor + 1) % 100 == 0 && (currentFloor + 1) <= 300) {
+                generateCelebrationFloor();
+            } else {
+                generateNextPlatform();
+            }
             highestPlatformY = getHighestPlatformY();
         }
     }
@@ -157,26 +162,38 @@ public class PlatformGenerator {
         platforms.add(new Platform(lastPlatformX, lastPlatformY, type, platformWidth, Constants.PLATFORM_THICKNESS));
     }
 
-    private void generateRestPlatform() {
-        // Create full-width rest platform every 50 floors
+    private void generateCelebrationFloor() {
+        // Create full-width celebration platform every 100 floors (like Icy Tower)
         currentFloor++;
+        
+        com.badlogic.gdx.Gdx.app.log("PlatformGenerator", "Creating celebration floor " + currentFloor + "!");
 
-        lastPlatformY += Constants.MIN_PLATFORM_SPACING_Y * 2; // Extra spacing for rest platforms
+        lastPlatformY += Constants.MIN_PLATFORM_SPACING_Y * 3; // Extra spacing for celebration
 
-        // Create multiple platforms side by side to cover full width
+        // Create multiple large platforms side by side to cover full width - no gaps for safety
         float platformWidth = Constants.PLATFORM_WIDTH_LARGE;
-        int platformCount = (int) (Constants.WORLD_WIDTH / platformWidth) + 1;
+        int platformCount = (int) Math.ceil(Constants.WORLD_WIDTH / platformWidth);
         float startX = 0;
 
         for (int i = 0; i < platformCount; i++) {
             float x = startX + (i * platformWidth);
             if (x < Constants.WORLD_WIDTH) {
-                platforms.add(new Platform(x, lastPlatformY, Platform.PlatformType.NORMAL, platformWidth, Constants.PLATFORM_THICKNESS));
+                // Make sure the last platform covers to the edge
+                float actualWidth = platformWidth;
+                if (i == platformCount - 1) {
+                    actualWidth = Constants.WORLD_WIDTH - x;
+                }
+                platforms.add(new Platform(x, lastPlatformY, Platform.PlatformType.BOUNCY, actualWidth, Constants.PLATFORM_THICKNESS));
             }
         }
 
-        // Update last platform position
+        // Update last platform position to center for next generation
         lastPlatformX = Constants.WORLD_WIDTH / 2;
+    }
+    
+    private void generateRestPlatform() {
+        // Legacy method - now use generateCelebrationFloor instead
+        generateCelebrationFloor();
     }
 
     private float getPlatformWidthForFloor(int floor) {
@@ -237,5 +254,14 @@ public class PlatformGenerator {
 
     public int getCurrentFloor() {
         return currentFloor;
+    }
+    
+    public boolean shouldCelebrate(int floor) {
+        for (int celebrationFloor : Constants.CELEBRATION_FLOORS) {
+            if (floor == celebrationFloor) {
+                return true;
+            }
+        }
+        return false;
     }
 }

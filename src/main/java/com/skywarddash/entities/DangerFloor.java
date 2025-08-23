@@ -16,16 +16,24 @@ public class DangerFloor {
     }
 
     public void update(float deltaTime, int score, float gameTime, float playerY) {
-        // Reduced grace period for more intensity
-        float gracePeriod = 2.0f; // Start rising after 2 seconds
+        // Longer grace period for better early game experience
+        float gracePeriod = 10.0f; // Start rising after 10 seconds (like Icy Tower)
 
         if (gameTime > gracePeriod) {
-            // Simple rising floor - always goes up, never down
-            float baseSpeedMultiplier = 1.5f; // Base speed for rising
-            float scoreSpeedMultiplier = 1.0f + (score / 200.0f) * 0.1f; // Gradually increase speed with score
-            float timeSpeedMultiplier = 1.0f + ((gameTime - gracePeriod) / 30.0f) * 0.5f; // Increase speed over time
-
-            float totalSpeedMultiplier = baseSpeedMultiplier * scoreSpeedMultiplier * timeSpeedMultiplier;
+            // Progressive speed system based on player height/score
+            float baseSpeedMultiplier = 0.8f; // Much slower base speed for early game
+            
+            // Score-based progression (very gradual)
+            float scoreSpeedMultiplier = 1.0f + Math.max(0, (score - 100) / 500.0f) * 0.15f;
+            
+            // Time-based progression (slower acceleration)
+            float timeSpeedMultiplier = 1.0f + ((gameTime - gracePeriod) / 60.0f) * 0.2f;
+            
+            // Height-based progression - speed up as player gets higher
+            float heightBonus = Math.max(0, playerY - 500f) / 2000f; // Bonus after 500px height
+            
+            float totalSpeedMultiplier = baseSpeedMultiplier * scoreSpeedMultiplier * 
+                                       timeSpeedMultiplier * (1.0f + heightBonus);
 
             // Always rise at calculated speed
             height += speed * totalSpeedMultiplier * deltaTime;

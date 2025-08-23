@@ -25,6 +25,8 @@ public class Platform {
     private boolean shouldRemove;
     private float stateTimer;
     private Vector2 velocity;
+    private Vector2 originalPosition; // Store original position for respawn
+    private boolean canRespawn;
 
     public Platform(float x, float y, PlatformType type) {
         this(x, y, type, Constants.PLATFORM_WIDTH_MEDIUM, Constants.PLATFORM_THICKNESS);
@@ -40,8 +42,13 @@ public class Platform {
         this.shouldRemove = false;
         this.stateTimer = 0f;
         this.velocity = new Vector2();
+        this.originalPosition = new Vector2(x, y);
+        this.canRespawn = (type == PlatformType.BREAKABLE || type == PlatformType.FALLING);
 
-        Gdx.app.log(TAG, "Created platform: " + type + " at (" + x + ", " + y + ") size: " + width + "x" + height);
+        // Only log special platforms and every 10th platform to reduce spam
+        if (type != PlatformType.NORMAL || (int)(x + y) % 500 == 0) {
+            Gdx.app.log(TAG, "Created platform: " + type + " at (" + x + ", " + y + ") size: " + width + "x" + height);
+        }
     }
 
     public Platform(float x, float y) {
@@ -88,15 +95,28 @@ public class Platform {
     private void updateFallingPlatform(float deltaTime) {
         if (visited && stateTimer > FALLING_DELAY) {
             velocity.y = -FALLING_SPEED;
+            // Instead of removing completely, respawn after some time
             if (position.y < -height) {
-                shouldRemove = true;
+                if (canRespawn) {
+                    respawnPlatform();
+                } else {
+                    shouldRemove = true;
+                }
             }
         }
     }
 
     private void updateBreakablePlatform(float deltaTime) {
         if (visited && stateTimer > 1.0f) { // Give player time to jump off
-            shouldRemove = true;
+            if (canRespawn) {
+                // Hide platform temporarily, then respawn it
+                position.y = -1000; // Move off screen temporarily
+                if (stateTimer > 5.0f) { // Respawn after 5 seconds
+                    respawnPlatform();
+                }
+            } else {
+                shouldRemove = true;
+            }
         }
     }
 
@@ -172,7 +192,10 @@ public class Platform {
             if (!visited) {
                 visited = true;
                 stateTimer = 0f; // Reset timer when first visited
-                Gdx.app.log(TAG, "Player landed on " + type + " platform");
+                // Only log special platform landings
+                if (type != PlatformType.NORMAL) {
+                    Gdx.app.log(TAG, "Player landed on " + type + " platform");
+                }
             }
 
             switch (type) {
@@ -234,7 +257,7 @@ public class Platform {
         // Transfer some platform velocity to player
         Vector2 playerVel = player.getVelocity();
         playerVel.x += velocity.x * 0.5f; // Partial momentum transfer
-        Gdx.app.log(TAG, "Moving platform - momentum transferred to player");
+        // Remove excessive logging from moving platforms
     }
 
     // Getters
@@ -273,6 +296,20 @@ public class Platform {
 
     public void markForRemoval() {
         this.shouldRemove = true;
+    }
+    
+    private void respawnPlatform() {
+        // Reset platform to original position and state
+        position.set(originalPosition);
+        bounds.setPosition(originalPosition.x, originalPosition.y);
+        velocity.set(0, 0);
+        visited = false;
+        stateTimer = 0f;
+        Gdx.app.log(TAG, "Respawned " + type + " platform at original position");
+    }
+    
+    public boolean isRespawnable() {
+        return canRespawn;
     }
 
     public enum PlatformType {
