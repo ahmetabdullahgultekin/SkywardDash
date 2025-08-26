@@ -16,14 +16,10 @@ public class Player {
     private boolean wasOnGround;
     private boolean hasAirJump;
     private float coyoteTime;
-    
+
     // Animation state
     private float animationTime = 0f;
     private PlayerAnimationState currentAnimation = PlayerAnimationState.IDLE;
-    
-    public enum PlayerAnimationState {
-        IDLE, RUNNING, JUMPING, FALLING
-    }
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
@@ -47,7 +43,7 @@ public class Player {
         } else if (coyoteTime > 0) {
             coyoteTime -= deltaTime;
         }
-        
+
         // Update animation state
         updateAnimationState();
 
@@ -100,7 +96,7 @@ public class Player {
         // Update bounds
         bounds.setPosition(position.x, position.y);
     }
-    
+
     private void updateAnimationState() {
         // Determine animation state based on player state
         if (!onGround) {
@@ -201,7 +197,7 @@ public class Player {
         velocity.y = 0;
         hasAirJump = true; // Reset air jump when landing
         coyoteTime = 0;
-        
+
         // Stabilize horizontal movement when landing on platform if player isn't moving
         if (Math.abs(velocity.x) < 50f) {
             velocity.x *= 0.8f; // Quick stabilization for very slow movements
@@ -216,7 +212,7 @@ public class Player {
         // Animate color based on current state
         float[] baseColor = Constants.PLAYER_COLOR;
         float colorPulse = (float) Math.sin(animationTime * 4f) * 0.1f + 1.0f;
-        
+
         switch (currentAnimation) {
             case JUMPING:
                 // Brighter blue when jumping
@@ -234,11 +230,11 @@ public class Player {
                 shapeRenderer.setColor(baseColor[0], baseColor[1], baseColor[2], baseColor[3]);
                 break;
         }
-        
+
         // Draw player with animation effects
         float width = Constants.PLAYER_WIDTH;
         float height = Constants.PLAYER_HEIGHT;
-        
+
         // Scale effect based on animation
         if (currentAnimation == PlayerAnimationState.JUMPING) {
             height *= 1.1f; // Stretch when jumping
@@ -248,14 +244,14 @@ public class Player {
             width *= 1.0f + (float) Math.sin(animationTime * 8f) * 0.05f;
             height *= 1.0f - (float) Math.sin(animationTime * 8f) * 0.03f;
         }
-        
+
         shapeRenderer.rect(position.x, position.y, width, height);
-        
+
         // Add trail effect for high-speed movement
         if (Math.abs(velocity.x) > 300f) {
             float trailAlpha = Math.min(Math.abs(velocity.x) / 1000f, 0.8f);
             shapeRenderer.setColor(baseColor[0], baseColor[1], baseColor[2], trailAlpha * 0.5f);
-            
+
             // Draw trail behind player
             float trailOffset = velocity.x > 0 ? -20f : 20f;
             shapeRenderer.rect(position.x + trailOffset, position.y, width * 0.8f, height * 0.6f);
@@ -265,15 +261,15 @@ public class Player {
     public void render(com.badlogic.gdx.graphics.g2d.SpriteBatch batch, com.skywarddash.utils.AssetManager assetManager) {
         if (assetManager.isAssetsLoaded()) {
             com.badlogic.gdx.graphics.g2d.TextureRegion currentFrame = getCurrentAnimationFrame(assetManager);
-            
+
             if (currentFrame != null) {
                 // Determine if we should flip the sprite based on movement direction
                 boolean flipX = velocity.x < 0; // Flip when moving left
-                
+
                 // Apply any scale effects based on animation state
                 float width = Constants.PLAYER_WIDTH;
                 float height = Constants.PLAYER_HEIGHT;
-                
+
                 if (currentAnimation == PlayerAnimationState.JUMPING) {
                     height *= 1.05f; // Slight stretch when jumping
                     width *= 0.98f;
@@ -282,55 +278,55 @@ public class Player {
                     width *= 1.0f + (float) Math.sin(animationTime * 12f) * 0.03f;
                     height *= 1.0f - (float) Math.sin(animationTime * 12f) * 0.02f;
                 }
-                
+
                 // Draw the sprite with proper scaling and flipping
-                batch.draw(currentFrame, 
-                          flipX ? position.x + width : position.x, position.y, 
-                          flipX ? -width : width, height);
-                
+                batch.draw(currentFrame,
+                        flipX ? position.x + width : position.x, position.y,
+                        flipX ? -width : width, height);
+
                 // Add speed trail effect for high-speed movement using texture
                 if (Math.abs(velocity.x) > 400f && currentFrame != null) {
                     float trailAlpha = Math.min(Math.abs(velocity.x) / 1000f, 0.6f);
                     com.badlogic.gdx.graphics.Color oldColor = batch.getColor();
                     batch.setColor(1.0f, 1.0f, 1.0f, trailAlpha * 0.4f);
-                    
+
                     // Draw trail behind player
                     float trailOffset = velocity.x > 0 ? -25f : 25f;
-                    batch.draw(currentFrame, 
-                              flipX ? position.x + trailOffset + width * 0.8f : position.x + trailOffset, 
-                              position.y, 
-                              flipX ? -width * 0.8f : width * 0.8f, height * 0.7f);
-                    
+                    batch.draw(currentFrame,
+                            flipX ? position.x + trailOffset + width * 0.8f : position.x + trailOffset,
+                            position.y,
+                            flipX ? -width * 0.8f : width * 0.8f, height * 0.7f);
+
                     batch.setColor(oldColor); // Restore original color
                 }
-                
+
             } else {
                 // Fallback - no animation available, just draw idle frame
                 batch.draw(assetManager.playerIdle, position.x, position.y, Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
             }
         }
     }
-    
+
     private com.badlogic.gdx.graphics.g2d.TextureRegion getCurrentAnimationFrame(com.skywarddash.utils.AssetManager assetManager) {
         switch (currentAnimation) {
             case IDLE:
                 return assetManager.playerIdle;
-                
+
             case RUNNING:
                 // Alternate between walk1 and walk2 for running animation
                 float runAnimSpeed = 8f; // Higher speed = faster animation
                 if (assetManager.playerRun1 != null && assetManager.playerRun2 != null) {
-                    return ((int)(animationTime * runAnimSpeed) % 2 == 0) ? assetManager.playerRun1 : assetManager.playerRun2;
+                    return ((int) (animationTime * runAnimSpeed) % 2 == 0) ? assetManager.playerRun1 : assetManager.playerRun2;
                 } else {
                     return assetManager.playerIdle; // Fallback
                 }
-                
+
             case JUMPING:
                 return assetManager.playerJump != null ? assetManager.playerJump : assetManager.playerIdle;
-                
+
             case FALLING:
                 return assetManager.playerFalling != null ? assetManager.playerFalling : assetManager.playerIdle;
-                
+
             default:
                 return assetManager.playerIdle;
         }
@@ -374,12 +370,16 @@ public class Player {
         position.set(x, y);
         bounds.setPosition(x, y);
     }
-    
+
     public PlayerAnimationState getCurrentAnimation() {
         return currentAnimation;
     }
-    
+
     public float getAnimationTime() {
         return animationTime;
+    }
+
+    public enum PlayerAnimationState {
+        IDLE, RUNNING, JUMPING, FALLING
     }
 }

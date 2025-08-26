@@ -27,7 +27,8 @@ public class AboutScreen implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+    }
 
     @Override
     public void render(float delta) {
@@ -38,107 +39,107 @@ public class AboutScreen implements Screen {
     }
 
     private void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || 
-            Gdx.input.isKeyJustPressed(Input.Keys.ENTER) ||
-            Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.ENTER) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(new MenuScreen(game));
         }
     }
 
     private void draw() {
         ScreenUtils.clear(0.05f, 0.05f, 0.15f, 1.0f);
-        
+
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.shapeRenderer.setProjectionMatrix(camera.combined);
-        
+
         // Draw animated background
         drawAboutBackground();
-        
+
         game.batch.begin();
-        
+
         // Main title with glow effect
         game.font.getData().setScale(4.0f);
         game.font.setColor(0.3f, 0.9f, 1.0f, 1.0f);
         String title = "SKYWARD DASH";
         float titleWidth = game.font.draw(game.batch, title, 0, 0).width;
-        game.font.draw(game.batch, title, 
-                      (Constants.WORLD_WIDTH - titleWidth) / 2, 
-                      camera.position.y + 280f);
-        
+        game.font.draw(game.batch, title,
+                (Constants.WORLD_WIDTH - titleWidth) / 2,
+                camera.position.y + 280f);
+
         // Version info
         game.font.getData().setScale(1.8f);
         game.font.setColor(0.8f, 1.0f, 0.3f, 1.0f);
         String version = "Version 1.0.0";
         float versionWidth = game.font.draw(game.batch, version, 0, 0).width;
-        game.font.draw(game.batch, version, 
-                      (Constants.WORLD_WIDTH - versionWidth) / 2, 
-                      camera.position.y + 220f);
-        
+        game.font.draw(game.batch, version,
+                (Constants.WORLD_WIDTH - versionWidth) / 2,
+                camera.position.y + 220f);
+
         // Developer section
         float contentY = camera.position.y + 150f;
         float lineSpacing = 50f;
-        
+
         game.font.getData().setScale(2.2f);
         game.font.setColor(1.0f, 0.8f, 0.2f, 1.0f);
         String devTitle = "DEVELOPED BY";
         float devTitleWidth = game.font.draw(game.batch, devTitle, 0, 0).width;
-        game.font.draw(game.batch, devTitle, 
-                      (Constants.WORLD_WIDTH - devTitleWidth) / 2, contentY);
-        
+        game.font.draw(game.batch, devTitle,
+                (Constants.WORLD_WIDTH - devTitleWidth) / 2, contentY);
+
         contentY -= 60f;
-        
+
         game.font.getData().setScale(2.5f);
         game.font.setColor(1.0f, 0.4f, 0.8f, 1.0f); // Pink/magenta
         String company = "Rolling Cat Software";
         float companyWidth = game.font.draw(game.batch, company, 0, 0).width;
-        game.font.draw(game.batch, company, 
-                      (Constants.WORLD_WIDTH - companyWidth) / 2, contentY);
-        
+        game.font.draw(game.batch, company,
+                (Constants.WORLD_WIDTH - companyWidth) / 2, contentY);
+
         // Description
         contentY -= 80f;
         game.font.getData().setScale(1.6f);
         game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        
+
         String[] description = {
-            "An Icy Tower-inspired vertical platformer",
-            "where momentum is everything!",
-            "",
-            "Built with LibGDX framework",
-            "Featuring procedural level generation,",
-            "combo systems, and endless climbing action."
+                "An Icy Tower-inspired vertical platformer",
+                "where momentum is everything!",
+                "",
+                "Built with LibGDX framework",
+                "Featuring procedural level generation,",
+                "combo systems, and endless climbing action."
         };
-        
+
         for (String line : description) {
             if (!line.isEmpty()) {
                 float lineWidth = game.font.draw(game.batch, line, 0, 0).width;
-                game.font.draw(game.batch, line, 
-                              (Constants.WORLD_WIDTH - lineWidth) / 2, contentY);
+                game.font.draw(game.batch, line,
+                        (Constants.WORLD_WIDTH - lineWidth) / 2, contentY);
             }
             contentY -= lineSpacing;
         }
-        
+
         // Credits section
         contentY -= 40f;
         game.font.getData().setScale(2.0f);
         game.font.setColor(0.2f, 1.0f, 0.4f, 1.0f);
         String creditsTitle = "SPECIAL THANKS";
         float creditsTitleWidth = game.font.draw(game.batch, creditsTitle, 0, 0).width;
-        game.font.draw(game.batch, creditsTitle, 
-                      (Constants.WORLD_WIDTH - creditsTitleWidth) / 2, contentY);
-        
+        game.font.draw(game.batch, creditsTitle,
+                (Constants.WORLD_WIDTH - creditsTitleWidth) / 2, contentY);
+
         contentY -= 60f;
         game.font.getData().setScale(1.4f);
         game.font.setColor(0.8f, 0.8f, 0.8f, 1.0f);
-        
+
         String[] credits = {
-            "Kenney.nl - UI and graphic assets",
-            "LibGDX - Amazing game development framework",
-            "Original Icy Tower - Inspiration and gameplay",
-            "",
-            "Thank you for playing!"
+                "Kenney.nl - UI and graphic assets",
+                "LibGDX - Amazing game development framework",
+                "Original Icy Tower - Inspiration and gameplay",
+                "",
+                "Thank you for playing!"
         };
-        
+
         for (String line : credits) {
             if (!line.isEmpty()) {
                 if (line.startsWith("Thank you")) {
@@ -147,40 +148,40 @@ public class AboutScreen implements Screen {
                     game.font.setColor(0.8f, 0.8f, 0.8f, 1.0f);
                 }
                 float lineWidth = game.font.draw(game.batch, line, 0, 0).width;
-                game.font.draw(game.batch, line, 
-                              (Constants.WORLD_WIDTH - lineWidth) / 2, contentY);
+                game.font.draw(game.batch, line,
+                        (Constants.WORLD_WIDTH - lineWidth) / 2, contentY);
             }
             contentY -= 40f;
         }
-        
+
         // Back instruction
         game.font.getData().setScale(1.2f);
         game.font.setColor(0.7f, 0.9f, 1.0f, 1.0f);
         String instructions = "Press ESC or Enter to go back";
         float instructionWidth = game.font.draw(game.batch, instructions, 0, 0).width;
         game.font.draw(game.batch, instructions,
-                      (Constants.WORLD_WIDTH - instructionWidth) / 2, 
-                      camera.position.y - 350f);
-        
+                (Constants.WORLD_WIDTH - instructionWidth) / 2,
+                camera.position.y - 350f);
+
         // Reset font
         game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         game.font.getData().setScale(1.0f);
-        
+
         game.batch.end();
     }
-    
+
     private void drawAboutBackground() {
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        
+
         float time = animationTimer;
-        
+
         // Draw animated logo elements in background
         for (int i = 0; i < 8; i++) {
             float x = (i % 4) * 400f + 200f + (float) Math.sin(time * 0.5f + i) * 100f;
             float y = (i / 4) * 300f + 150f + (float) Math.cos(time * 0.3f + i) * 50f;
-            
+
             float alpha = 0.1f + (float) Math.sin(time + i) * 0.05f;
-            
+
             // Draw company logo elements (cat-inspired shapes)
             if (i % 3 == 0) {
                 // Cat ear triangles
@@ -211,26 +212,26 @@ public class AboutScreen implements Screen {
                 }
             }
         }
-        
+
         // Sparkle effects
         if (sparkleTimer > 0.1f) {
             sparkleTimer = 0f;
-            
+
             for (int i = 0; i < 5; i++) {
                 float sparkleX = (float) Math.random() * Constants.WORLD_WIDTH;
                 float sparkleY = (float) Math.random() * Constants.WORLD_HEIGHT;
                 float sparkleSize = (float) Math.random() * 8f + 4f;
                 float sparkleAlpha = (float) Math.random() * 0.5f + 0.2f;
-                
+
                 game.shapeRenderer.setColor(1.0f, 1.0f, 1.0f, sparkleAlpha);
                 game.shapeRenderer.rect(sparkleX, sparkleY, sparkleSize, sparkleSize);
-                
+
                 // Cross sparkle pattern
                 game.shapeRenderer.rect(sparkleX - sparkleSize, sparkleY, sparkleSize * 3f, 2f);
                 game.shapeRenderer.rect(sparkleX, sparkleY - sparkleSize, 2f, sparkleSize * 3f);
             }
         }
-        
+
         game.shapeRenderer.end();
     }
 
@@ -240,14 +241,18 @@ public class AboutScreen implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+    }
 }

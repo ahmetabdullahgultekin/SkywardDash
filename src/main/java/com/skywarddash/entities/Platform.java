@@ -46,7 +46,7 @@ public class Platform {
         this.canRespawn = (type == PlatformType.BREAKABLE || type == PlatformType.FALLING);
 
         // Only log special platforms and every 10th platform to reduce spam
-        if (type != PlatformType.NORMAL || (int)(x + y) % 500 == 0) {
+        if (type != PlatformType.NORMAL || (int) (x + y) % 500 == 0) {
             Gdx.app.log(TAG, "Created platform: " + type + " at (" + x + ", " + y + ") size: " + width + "x" + height);
         }
     }
@@ -297,7 +297,7 @@ public class Platform {
     public void markForRemoval() {
         this.shouldRemove = true;
     }
-    
+
     private void respawnPlatform() {
         // Reset platform to original position and state
         position.set(originalPosition);
@@ -307,7 +307,7 @@ public class Platform {
         stateTimer = 0f;
         Gdx.app.log(TAG, "Respawned " + type + " platform at original position");
     }
-    
+
     public boolean isRespawnable() {
         return canRespawn;
     }

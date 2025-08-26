@@ -22,18 +22,18 @@ public class DangerFloor {
         if (gameTime > gracePeriod) {
             // Progressive speed system based on player height/score
             float baseSpeedMultiplier = 0.8f; // Much slower base speed for early game
-            
+
             // Score-based progression (very gradual)
             float scoreSpeedMultiplier = 1.0f + Math.max(0, (score - 100) / 500.0f) * 0.15f;
-            
+
             // Time-based progression (slower acceleration)
             float timeSpeedMultiplier = 1.0f + ((gameTime - gracePeriod) / 60.0f) * 0.2f;
-            
+
             // Height-based progression - speed up as player gets higher
             float heightBonus = Math.max(0, playerY - 500f) / 2000f; // Bonus after 500px height
-            
-            float totalSpeedMultiplier = baseSpeedMultiplier * scoreSpeedMultiplier * 
-                                       timeSpeedMultiplier * (1.0f + heightBonus);
+
+            float totalSpeedMultiplier = baseSpeedMultiplier * scoreSpeedMultiplier *
+                    timeSpeedMultiplier * (1.0f + heightBonus);
 
             // Always rise at calculated speed
             height += speed * totalSpeedMultiplier * deltaTime;

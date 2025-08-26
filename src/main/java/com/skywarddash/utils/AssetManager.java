@@ -86,40 +86,40 @@ public class AssetManager implements Disposable {
         try {
             // Load all player animation sprites from Kenney pack
             String basePath = "assets/kenney_platformer-pack-redux/PNG/Players/Variable sizes/Blue/";
-            
+
             if (Gdx.files.internal(basePath + "alienBlue_stand.png").exists()) {
                 playerIdle = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_stand.png")));
                 Gdx.app.log("AssetManager", "Player idle animation loaded");
             }
-            
+
             if (Gdx.files.internal(basePath + "alienBlue_walk1.png").exists()) {
                 playerRun1 = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_walk1.png")));
                 Gdx.app.log("AssetManager", "Player walk1 animation loaded");
             }
-            
+
             if (Gdx.files.internal(basePath + "alienBlue_walk2.png").exists()) {
                 playerRun2 = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_walk2.png")));
                 Gdx.app.log("AssetManager", "Player walk2 animation loaded");
             }
-            
+
             if (Gdx.files.internal(basePath + "alienBlue_jump.png").exists()) {
                 playerJump = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_jump.png")));
                 Gdx.app.log("AssetManager", "Player jump animation loaded");
             }
-            
+
             if (Gdx.files.internal(basePath + "alienBlue_front.png").exists()) {
                 playerFalling = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_front.png")));
                 Gdx.app.log("AssetManager", "Player falling animation loaded");
             }
-            
+
             // Fallback if any animations are missing
             if (playerIdle == null && Gdx.files.internal(basePath + "alienBlue_front.png").exists()) {
                 playerIdle = new TextureRegion(new Texture(Gdx.files.internal(basePath + "alienBlue_front.png")));
             }
-            
+
             Gdx.app.log("AssetManager", "Player animations loaded from Kenney pack");
             return;
-            
+
         } catch (Exception e) {
             Gdx.app.error("AssetManager", "Failed to load player animations: " + e.getMessage());
         }
@@ -195,7 +195,7 @@ public class AssetManager implements Disposable {
             } else {
                 menuBackgroundTexture = createGradientBackground();
             }
-            
+
             // Load custom splash background
             if (Gdx.files.internal("assets/images/splash.png").exists()) {
                 splashBackgroundTexture = new Texture(Gdx.files.internal("assets/images/splash.png"));
@@ -203,7 +203,7 @@ public class AssetManager implements Disposable {
             } else {
                 splashBackgroundTexture = createGradientBackground();
             }
-            
+
             // Try to load background from Kenney pack for game
             if (Gdx.files.internal("assets/kenney_platformer-pack-redux/PNG/Backgrounds/blue_desert.png").exists()) {
                 backgroundTexture = new Texture(Gdx.files.internal("assets/kenney_platformer-pack-redux/PNG/Backgrounds/blue_desert.png"));
@@ -402,7 +402,7 @@ public class AssetManager implements Disposable {
     public int getHighScore() {
         return preferences.getInteger("highScore", 0);
     }
-    
+
     public Preferences getPreferences() {
         return preferences;
     }

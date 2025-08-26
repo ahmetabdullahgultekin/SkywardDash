@@ -93,20 +93,20 @@ public class MenuScreen implements Screen {
         // Draw custom background image first - fit to height, center horizontally
         if (game.assetManager.menuBackgroundTexture != null) {
             game.batch.begin();
-            
+
             // Get original texture dimensions
             float textureWidth = game.assetManager.menuBackgroundTexture.getWidth();
             float textureHeight = game.assetManager.menuBackgroundTexture.getHeight();
-            
+
             // Calculate scale to fit height while maintaining aspect ratio
             float scale = Constants.WORLD_HEIGHT / textureHeight;
             float scaledWidth = textureWidth * scale;
-            
+
             // Align the image to the left
             float bgX = 0;
-            
-            game.batch.draw(game.assetManager.menuBackgroundTexture, 
-                           bgX, 0, scaledWidth, Constants.WORLD_HEIGHT);
+
+            game.batch.draw(game.assetManager.menuBackgroundTexture,
+                    bgX, 0, scaledWidth, Constants.WORLD_HEIGHT);
             game.batch.end();
         }
 
@@ -115,27 +115,27 @@ public class MenuScreen implements Screen {
         // Draw semi-transparent overlay behind menu for better readability
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.setColor(0.0f, 0.0f, 0.1f, 0.6f); // Dark blue semi-transparent
-        
+
         if (game.assetManager.menuBackgroundTexture != null) {
             float textureWidth = game.assetManager.menuBackgroundTexture.getWidth();
             float textureHeight = game.assetManager.menuBackgroundTexture.getHeight();
             float scale = Constants.WORLD_HEIGHT / textureHeight;
             float scaledWidth = textureWidth * scale;
             float bgX = 0; // Background is left-aligned
-            
+
             // Draw overlay only in right empty space where menu is located
             if (scaledWidth < Constants.WORLD_WIDTH - 400f) {
                 // Menu on right side - overlay the right empty area
                 game.shapeRenderer.rect(scaledWidth, 0, Constants.WORLD_WIDTH - scaledWidth, Constants.WORLD_HEIGHT);
             } else {
                 // Menu centered - add overlay around menu area
-                game.shapeRenderer.rect(Constants.WORLD_WIDTH * 0.25f, Constants.WORLD_HEIGHT * 0.15f, 
-                                      Constants.WORLD_WIDTH * 0.5f, Constants.WORLD_HEIGHT * 0.7f);
+                game.shapeRenderer.rect(Constants.WORLD_WIDTH * 0.25f, Constants.WORLD_HEIGHT * 0.15f,
+                        Constants.WORLD_WIDTH * 0.5f, Constants.WORLD_HEIGHT * 0.7f);
             }
         } else {
             // No background image - overlay centered menu area
-            game.shapeRenderer.rect(Constants.WORLD_WIDTH * 0.25f, Constants.WORLD_HEIGHT * 0.15f, 
-                                  Constants.WORLD_WIDTH * 0.5f, Constants.WORLD_HEIGHT * 0.7f);
+            game.shapeRenderer.rect(Constants.WORLD_WIDTH * 0.25f, Constants.WORLD_HEIGHT * 0.15f,
+                    Constants.WORLD_WIDTH * 0.5f, Constants.WORLD_HEIGHT * 0.7f);
         }
         game.shapeRenderer.end();
 
@@ -150,7 +150,7 @@ public class MenuScreen implements Screen {
             float scale = Constants.WORLD_HEIGHT / textureHeight;
             float scaledWidth = textureWidth * scale;
             float bgX = 0; // Background is left-aligned
-            
+
             // If there's empty space on the right, position menu there
             if (scaledWidth < Constants.WORLD_WIDTH - 400f) {
                 menuCenterX = scaledWidth + (Constants.WORLD_WIDTH - scaledWidth) / 2; // Center in right empty space
@@ -179,7 +179,7 @@ public class MenuScreen implements Screen {
         float buttonWidth = 350f;
         float buttonHeight = 70f;
         float buttonSpacing = 85f;
-        
+
         // Calculate total height of all buttons and center them vertically
         float totalMenuHeight = menuOptions.length * buttonHeight + (menuOptions.length - 1) * buttonSpacing;
         float startY = camera.position.y + (totalMenuHeight / 2) - buttonHeight;
@@ -225,7 +225,7 @@ public class MenuScreen implements Screen {
             com.badlogic.gdx.graphics.g2d.GlyphLayout layout = new com.badlogic.gdx.graphics.g2d.GlyphLayout();
             layout.setText(game.font, menuOptions[i]);
             textWidth = layout.width;
-            
+
             game.font.draw(game.batch, menuOptions[i],
                     menuCenterX - textWidth / 2, buttonY + buttonHeight / 2 + 10f);
         }
@@ -316,7 +316,7 @@ public class MenuScreen implements Screen {
             // Enhanced color variations with glow effect
             float alpha = 0.25f + (float) Math.sin(time * 2f + i) * 0.15f;
             float pulseSize = 1.0f + (float) Math.sin(time * 3f + i * 0.5f) * 0.1f;
-            
+
             if (i % 5 == 0) {
                 game.shapeRenderer.setColor(0.2f, 0.6f, 1.0f, alpha); // Bright blue
             } else if (i % 5 == 1) {
@@ -340,7 +340,7 @@ public class MenuScreen implements Screen {
             float particleY = ((i * 123f) % Constants.WORLD_HEIGHT) + (float) Math.sin(time + i) * 50f;
             float particleSize = 3f + (float) Math.sin(time * 4f + i) * 2f;
             float particleAlpha = 0.1f + (float) Math.sin(time * 2f + i) * 0.1f;
-            
+
             game.shapeRenderer.setColor(1.0f, 1.0f, 1.0f, particleAlpha);
             game.shapeRenderer.rect(particleX, particleY, particleSize, particleSize);
         }
@@ -350,16 +350,16 @@ public class MenuScreen implements Screen {
             float arrowX = (i % 4) * 400f + 200f;
             float arrowY = (i / 4) * 300f + 300f + (float) Math.sin(time * 1.5f + i) * 20f;
             float arrowAlpha = 0.15f + (float) Math.sin(time + i * 0.7f) * 0.1f;
-            
+
             game.shapeRenderer.setColor(0.3f, 0.9f, 1.0f, arrowAlpha);
-            
+
             // Draw upward arrow shape
             float arrowSize = 30f;
             // Arrow shaft
             game.shapeRenderer.rect(arrowX - 5f, arrowY, 10f, arrowSize);
             // Arrow head (triangular approximation)
             for (int j = 0; j < 6; j++) {
-                game.shapeRenderer.rect(arrowX - (6-j) * 2f, arrowY + arrowSize + j * 3f, (6-j) * 4f, 3f);
+                game.shapeRenderer.rect(arrowX - (6 - j) * 2f, arrowY + arrowSize + j * 3f, (6 - j) * 4f, 3f);
             }
         }
 

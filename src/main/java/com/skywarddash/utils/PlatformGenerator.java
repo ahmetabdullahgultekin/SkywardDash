@@ -165,7 +165,7 @@ public class PlatformGenerator {
     private void generateCelebrationFloor() {
         // Create full-width celebration platform every 100 floors (like Icy Tower)
         currentFloor++;
-        
+
         com.badlogic.gdx.Gdx.app.log("PlatformGenerator", "Creating celebration floor " + currentFloor + "!");
 
         lastPlatformY += Constants.MIN_PLATFORM_SPACING_Y * 3; // Extra spacing for celebration
@@ -190,7 +190,7 @@ public class PlatformGenerator {
         // Update last platform position to center for next generation
         lastPlatformX = Constants.WORLD_WIDTH / 2;
     }
-    
+
     private void generateRestPlatform() {
         // Legacy method - now use generateCelebrationFloor instead
         generateCelebrationFloor();
@@ -255,7 +255,7 @@ public class PlatformGenerator {
     public int getCurrentFloor() {
         return currentFloor;
     }
-    
+
     public boolean shouldCelebrate(int floor) {
         for (int celebrationFloor : Constants.CELEBRATION_FLOORS) {
             if (floor == celebrationFloor) {
